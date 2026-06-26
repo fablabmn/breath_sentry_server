@@ -1,0 +1,163 @@
+[
+    {
+        "id": "b590023ad60e02f5",
+        "type": "tab",
+        "label": "mqtt_store_data",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a37c0a24890d4767",
+        "type": "tab",
+        "label": "http_response_to_server",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "3d312f1f7f3af26a",
+        "type": "tab",
+        "label": "mqtt_commands",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "688886661d9806d7",
+        "type": "mqtt-broker",
+        "name": "Mqtt locale",
+        "broker": "mosquitto-broker",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "5",
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "82b656fd2ad8e478",
+        "type": "mqtt in",
+        "z": "b590023ad60e02f5",
+        "name": "",
+        "topic": "#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "688886661d9806d7",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 120,
+        "wires": [
+            [
+                "8390ebe2425bcb51"
+            ]
+        ]
+    },
+    {
+        "id": "8390ebe2425bcb51",
+        "type": "debug",
+        "z": "b590023ad60e02f5",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 260,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "d7cb10592327721c",
+        "type": "http response",
+        "z": "a37c0a24890d4767",
+        "name": "risposta_test",
+        "statusCode": "200",
+        "headers": {
+            "test": "payalod_test"
+        },
+        "x": 510,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "cd271abc6a7bc4a0",
+        "type": "http in",
+        "z": "a37c0a24890d4767",
+        "name": "",
+        "url": "sentry_lists",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 200,
+        "wires": [
+            [
+                "8528c51b299d828e",
+                "474ebf5a01c94121"
+            ]
+        ]
+    },
+    {
+        "id": "8528c51b299d828e",
+        "type": "debug",
+        "z": "a37c0a24890d4767",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "474ebf5a01c94121",
+        "type": "template",
+        "z": "a37c0a24890d4767",
+        "name": "",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{\n  \"list\": [\n    \"BOARD_001\",\n    \"BOARD_002\"\n  ]\n}",
+        "output": "str",
+        "x": 320,
+        "y": 200,
+        "wires": [
+            [
+                "d7cb10592327721c"
+            ]
+        ]
+    }
+]

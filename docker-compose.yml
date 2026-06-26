@@ -1,0 +1,89 @@
+
+services:
+  # --- CONTAINER DI INIZIALIZZAZIONE PER I PERMESSI ---
+  # Si avvia, sistema i permessi nella cartella dei certificati e si spegne.
+  init-certs:
+    image: alpine:latest
+    container_name: mosquitto-init-certs
+    volumes:
+      - ./mosquitto/certs:/mnt/certs
+    command: >
+      sh -c "chown -R 1883:1883 /mnt/certs &&
+             chmod 600 /mnt/certs/*.key &&
+             chmod 644 /mnt/certs/*.crt 2>/dev/null || true"
+
+  # --- REVERSE PROXY (Caddy) ---
+  # Gestisce l'ingresso HTTPS (API) e lo smistamento interno.
+  proxy:
+    image: caddy:latest
+    container_name: reverse-proxy
+    restart: unless-stopped
+    ports:
+      - "443:443"  # L'UNICA porta web esposta verso l'esterno
+      - "80:80"    # Richiesta da Caddy per convalidare i certificati SSL di Let's Encrypt
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - iot-network
+
+  # --- BROKER MQTT (Mosquitto) ---
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto-broker
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+      - "8883:8883"  # Espone SOLO la porta MQTTS sicura verso l'esterno
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/certs:/mosquitto/certs
+    networks:
+      - iot-network
+    depends_on:
+      init-certs:
+        condition: service_completed_successfully
+
+  # --- NODE-RED ---
+  # Non esposto all'esterno. Ci accederai tramite tunnel SSH sulla porta 1880.
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered-app
+    restart: unless-stopped
+    volumes:
+      - ./nodered/data:/data
+    environment:
+      - TZ=Europe/Rome
+    networks:
+      - iot-network
+    depends_on:
+      - mosquitto
+      - influxdb
+
+  # --- DATABASE (InfluxDB v2) ---
+  # Invisibile all'esterno, comunica solo con Node-RED nella rete interna.
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb-storage
+    restart: unless-stopped
+    volumes:
+      - ./influxdb/data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=UnaPasswordSuperSicura123!
+      - DOCKER_INFLUXDB_INIT_ORG=my-org
+      - DOCKER_INFLUXDB_INIT_BUCKET=iot-data
+    networks:
+      - iot-network
+
+networks:
+  iot-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

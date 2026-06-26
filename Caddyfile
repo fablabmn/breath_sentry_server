@@ -1,0 +1,6 @@
+https://localhost {
+    # Rigira TUTTO il traffico a Node-RED
+    reverse_proxy nodered-app:1880
+
+    tls internal
+}
