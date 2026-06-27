@@ -6,7 +6,7 @@
                 "view-store-position": false,
                 "view-show-grid": true,
                 "view-snap-grid": true,
-                "view-grid-size": 20,
+                "view-grid-size": "20",
                 "view-node-status": true,
                 "view-node-info-icon": true,
                 "view-node-show-label": true,
@@ -18,17 +18,18 @@
                     "v": 4,
                     "tabs": [],
                     "primary": {
-                        "width": 357.973,
+                        "width": 519.996,
                         "top": {
                             "tabs": [
                                 "info",
                                 "help",
                                 "config",
-                                "context"
+                                "context",
+                                "dashboard-2.0"
                             ],
-                            "height": 473.977,
+                            "height": 242.965,
                             "hidden": false,
-                            "active": "help"
+                            "active": "dashboard-2.0"
                         },
                         "bottom": {
                             "tabs": [
@@ -39,12 +40,12 @@
                         }
                     },
                     "secondary": {
-                        "width": 210,
+                        "width": 348.996,
                         "top": {
                             "tabs": [
                                 "explorer"
                             ],
-                            "height": 249,
+                            "height": 231,
                             "hidden": false,
                             "active": "explorer"
                         },
@@ -60,10 +61,16 @@
             },
             "tours": {
                 "welcome": "5.0.0"
+            },
+            "dialog": {
+                "export": {
+                    "pretty": true,
+                    "json-view": true
+                }
             }
         },
         "debug": {
-            "filter": "filterAll",
+            "filter": "filterCurrent",
             "filteredNodes": [
                 "8390ebe2425bcb51"
             ]

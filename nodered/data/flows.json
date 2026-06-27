@@ -1,5 +1,13 @@
 [
     {
+        "id": "c16e1af2bba00f86",
+        "type": "tab",
+        "label": "GLOBAL",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
         "id": "b590023ad60e02f5",
         "type": "tab",
         "label": "mqtt_store_data",
@@ -19,6 +27,14 @@
         "id": "3d312f1f7f3af26a",
         "type": "tab",
         "label": "mqtt_commands",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f91ebe6f2c5a8c0c",
+        "type": "tab",
+        "label": "GUI",
         "disabled": false,
         "info": "",
         "env": []
@@ -55,11 +71,152 @@
         "sessionExpiry": ""
     },
     {
+        "id": "6ce7447891b85afb",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "page",
+        "navigationStyle": "default",
+        "titleBarStyle": "default",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "2ca78e0b733cb9c6",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "4e66ba748a47c8b2",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "6ce7447891b85afb",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "2ca78e0b733cb9c6",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": "true",
+        "disabled": "false"
+    },
+    {
+        "id": "a0e8865f24352ea4",
+        "type": "ui-group",
+        "name": "Sentry List Manager",
+        "page": "4e66ba748a47c8b2",
+        "width": 6,
+        "height": 1,
+        "order": 1,
+        "showTitle": true,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "e4494fe5fefcb554",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "sentry_db",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://influxdb-storage:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "d7cd23bd57d3555c",
+        "type": "inject",
+        "z": "c16e1af2bba00f86",
+        "name": "once",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0",
+        "topic": "",
+        "x": 50,
+        "y": 120,
+        "wires": [
+            [
+                "a2af13606dc40fd7"
+            ]
+        ]
+    },
+    {
+        "id": "a2af13606dc40fd7",
+        "type": "function",
+        "z": "c16e1af2bba00f86",
+        "name": "global_env",
+        "func": "global.set('sentry_list_file', '/data/authorized_sentry.json');\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 230,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "82b656fd2ad8e478",
         "type": "mqtt in",
         "z": "b590023ad60e02f5",
         "name": "",
-        "topic": "#",
+        "topic": "fablabmantova/breath_sentry/environment_data/#",
         "qos": "2",
         "datatype": "auto-detect",
         "broker": "688886661d9806d7",
@@ -67,16 +224,108 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 110,
+        "x": 240,
         "y": 120,
         "wires": [
             [
-                "8390ebe2425bcb51"
+                "ccdad37f5ce2aace"
             ]
         ]
     },
     {
-        "id": "8390ebe2425bcb51",
+        "id": "d2073b7eef7cd685",
+        "type": "file in",
+        "z": "b590023ad60e02f5",
+        "name": "",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 600,
+        "y": 420,
+        "wires": [
+            [
+                "75db0eb7da745962"
+            ]
+        ]
+    },
+    {
+        "id": "75db0eb7da745962",
+        "type": "json",
+        "z": "b590023ad60e02f5",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [
+                "c373295522002c8f"
+            ]
+        ]
+    },
+    {
+        "id": "c373295522002c8f",
+        "type": "function",
+        "z": "b590023ad60e02f5",
+        "name": "check_if_board_is_authorized",
+        "func": "const msg_board_id = flow.get('msg_board_id') || '';\nconst global_board_msg = JSON.parse(flow.get('global_board_msg')) || '';\nif (!msg_board_id || !global_board_msg)\n{\n    node.warn(\"msg_board_id is null\");\n    return null;\n}\nfor (const it of msg.payload) \n{\n    if (it.board_id === msg_board_id && it.authorized) \n    {\n        return global_board_msg;\n    }\n}\nnode.warn(\"board_id: \" + msg_board_id + \" not found\");\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 420,
+        "wires": [
+            [
+                "4ca49fd998c1c677"
+            ]
+        ]
+    },
+    {
+        "id": "ccdad37f5ce2aace",
+        "type": "json",
+        "z": "b590023ad60e02f5",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 530,
+        "y": 220,
+        "wires": [
+            [
+                "482dd3464db7c499"
+            ]
+        ]
+    },
+    {
+        "id": "482dd3464db7c499",
+        "type": "function",
+        "z": "b590023ad60e02f5",
+        "name": "parse_json_save_board_id",
+        "func": "//node.warn(JSON.parse(msg.payload).board_id);\nconst msg_board_id = JSON.parse(msg.payload).board_id;\nflow.set('msg_board_id', msg_board_id);\nflow.set('global_board_msg', msg.payload);\nreturn JSON.parse(msg.payload);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 320,
+        "wires": [
+            [
+                "d2073b7eef7cd685"
+            ]
+        ]
+    },
+    {
+        "id": "4ca49fd998c1c677",
         "type": "debug",
         "z": "b590023ad60e02f5",
         "name": "debug 1",
@@ -88,8 +337,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 260,
-        "y": 120,
+        "x": 1220,
+        "y": 420,
         "wires": []
     },
     {
@@ -99,7 +348,7 @@
         "name": "risposta_test",
         "statusCode": "200",
         "headers": {},
-        "x": 490,
+        "x": 710,
         "y": 200,
         "wires": []
     },
@@ -117,8 +366,7 @@
         "y": 200,
         "wires": [
             [
-                "8528c51b299d828e",
-                "474ebf5a01c94121"
+                "9729e079b4dde8c4"
             ]
         ]
     },
@@ -126,7 +374,7 @@
         "id": "8528c51b299d828e",
         "type": "debug",
         "z": "a37c0a24890d4767",
-        "name": "debug 2",
+        "name": "sentry_lists",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -135,27 +383,512 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 320,
-        "y": 120,
+        "x": 710,
+        "y": 140,
         "wires": []
     },
     {
-        "id": "474ebf5a01c94121",
-        "type": "template",
+        "id": "9729e079b4dde8c4",
+        "type": "file in",
         "z": "a37c0a24890d4767",
         "name": "",
-        "field": "payload",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "{\n  \"list\": \n  [\n    {\"id\": \"BOARD_001\", \"name\": \"Mantova - LAB1\"},\n    {\"id\": \"BOARD_002\", \"name\": \"BOARD_002\"},\n  ]\n}",
-        "output": "str",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
         "x": 320,
         "y": 200,
         "wires": [
             [
-                "d7cb10592327721c"
+                "e68dbb95663f3869"
             ]
+        ]
+    },
+    {
+        "id": "e68dbb95663f3869",
+        "type": "json",
+        "z": "a37c0a24890d4767",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 550,
+        "y": 200,
+        "wires": [
+            [
+                "d7cb10592327721c",
+                "8528c51b299d828e"
+            ]
+        ]
+    },
+    {
+        "id": "971dd88254d9615f",
+        "type": "ui-text-input",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "new_sentry_id",
+        "label": "New Sentry ID",
+        "order": 1,
+        "width": "2",
+        "height": "1",
+        "topic": "payload",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": true,
+        "sendOnClear": true,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "086844d451140860"
+            ]
+        ]
+    },
+    {
+        "id": "dc828deb202b05d4",
+        "type": "ui-button",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "autorize_sentry",
+        "label": "",
+        "order": 3,
+        "width": "1",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "plus",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "payload",
+        "topicType": "msg",
+        "buttonColor": "green",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 200,
+        "y": 180,
+        "wires": [
+            [
+                "0d1add2bfa96af4d"
+            ]
+        ]
+    },
+    {
+        "id": "7d04cdb0fd368e7c",
+        "type": "ui-table",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "sentry_table",
+        "label": "",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "maxrows": 0,
+        "passthru": false,
+        "autocols": true,
+        "showSearch": true,
+        "deselect": true,
+        "selectionType": "none",
+        "columns": [],
+        "mobileBreakpoint": "sm",
+        "mobileBreakpointType": "defaults",
+        "action": "replace",
+        "className": "",
+        "x": 1070,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0d1add2bfa96af4d",
+        "type": "function",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "check_if_empty",
+        "func": "const board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nif (!board_id) {\n    node.warn(\"board_id vuoto!\");\n    return null;\n}\nif (!board_name){\n    node.warn(\"board_name vuoto!\");\n    return null;\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 180,
+        "wires": [
+            [
+                "ac12c4387e19e5b2"
+            ]
+        ]
+    },
+    {
+        "id": "72e35052628a8d78",
+        "type": "file in",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 640,
+        "y": 500,
+        "wires": [
+            [
+                "f91471a3dc41dcef"
+            ]
+        ]
+    },
+    {
+        "id": "4a26869d615c1394",
+        "type": "debug",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1060,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "086844d451140860",
+        "type": "function",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "create_influx_entry",
+        "func": "const id = msg.payload || '';\nif (!id) {\n    node.warn(\"board_id vuoto!\");\n    flow.set('board_id', '');\n    return null;\n}\nflow.set('board_id', msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ac12c4387e19e5b2",
+        "type": "file in",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 440,
+        "y": 260,
+        "wires": [
+            [
+                "37461b81294ada75"
+            ]
+        ]
+    },
+    {
+        "id": "e752f46055b5b98c",
+        "type": "function",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "create_json_entry",
+        "func": "\nconst board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nmsg.payload.push({\n    board_id,\n    board_name: board_name,\n    authorized: true\n});\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 260,
+        "wires": [
+            [
+                "d16468cb7da4c6e2"
+            ]
+        ]
+    },
+    {
+        "id": "37461b81294ada75",
+        "type": "json",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 690,
+        "y": 260,
+        "wires": [
+            [
+                "e752f46055b5b98c"
+            ]
+        ]
+    },
+    {
+        "id": "d16468cb7da4c6e2",
+        "type": "file",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 440,
+        "y": 340,
+        "wires": [
+            [
+                "e80601c213dc9ba6",
+                "72e35052628a8d78"
+            ]
+        ]
+    },
+    {
+        "id": "f91471a3dc41dcef",
+        "type": "json",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 870,
+        "y": 500,
+        "wires": [
+            [
+                "7d04cdb0fd368e7c",
+                "4a26869d615c1394"
+            ]
+        ]
+    },
+    {
+        "id": "54503c81c58d2e15",
+        "type": "ui-button",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "refresh_sentry_lists",
+        "label": "",
+        "order": 4,
+        "width": "1",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "refresh",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 190,
+        "y": 500,
+        "wires": [
+            [
+                "72e35052628a8d78"
+            ]
+        ]
+    },
+    {
+        "id": "e80601c213dc9ba6",
+        "type": "debug",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "f102d65cd0db31a8",
+        "type": "ui-button",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "delete_all_sentry_lists",
+        "label": "DELETE ALL",
+        "order": 6,
+        "width": "6",
+        "height": "1",
+        "emulateClick": false,
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "delete",
+        "iconPosition": "left",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "buttonColor": "red",
+        "textColor": "",
+        "iconColor": "",
+        "enableClick": true,
+        "enablePointerdown": false,
+        "pointerdownPayload": "",
+        "pointerdownPayloadType": "str",
+        "enablePointerup": false,
+        "pointerupPayload": "",
+        "pointerupPayloadType": "str",
+        "x": 180,
+        "y": 680,
+        "wires": [
+            [
+                "81101a84faa3e0f0"
+            ]
+        ]
+    },
+    {
+        "id": "81101a84faa3e0f0",
+        "type": "function",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "empty_json",
+        "func": "msg.payload = [ ];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 680,
+        "wires": [
+            [
+                "296fe549b31721cf",
+                "a8c3a895edef98fe"
+            ]
+        ]
+    },
+    {
+        "id": "296fe549b31721cf",
+        "type": "file",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "filename": "sentry_list_file",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 580,
+        "y": 680,
+        "wires": [
+            [
+                "72e35052628a8d78"
+            ]
+        ]
+    },
+    {
+        "id": "a8c3a895edef98fe",
+        "type": "debug",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "301051fb402af925",
+        "type": "ui-text-input",
+        "z": "f91ebe6f2c5a8c0c",
+        "group": "a0e8865f24352ea4",
+        "name": "new_sentry_name",
+        "label": "New Sentry NAME",
+        "order": 2,
+        "width": "2",
+        "height": "1",
+        "topic": "payload",
+        "topicType": "msg",
+        "mode": "text",
+        "tooltip": "",
+        "delay": 300,
+        "passthru": true,
+        "sendOnDelay": false,
+        "sendOnBlur": true,
+        "sendOnEnter": true,
+        "className": "",
+        "clearable": true,
+        "sendOnClear": true,
+        "icon": "",
+        "iconPosition": "left",
+        "iconInnerPosition": "inside",
+        "x": 190,
+        "y": 120,
+        "wires": [
+            [
+                "757d1a138de2288d"
+            ]
+        ]
+    },
+    {
+        "id": "757d1a138de2288d",
+        "type": "function",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "create_influx_entry",
+        "func": "const name = msg.payload || '';\nif (!name) {\n    node.warn(\"board_name vuoto!\");\n    flow.set('board_name', '');\n    return null;\n}\nflow.set('board_name', msg.payload);\nreturn null;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 120,
+        "wires": [
+            []
         ]
     }
 ]

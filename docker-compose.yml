@@ -72,11 +72,12 @@ services:
     volumes:
       - ./influxdb/data:/var/lib/influxdb2
     environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=admin
-      - DOCKER_INFLUXDB_INIT_PASSWORD=UnaPasswordSuperSicura123!
-      - DOCKER_INFLUXDB_INIT_ORG=my-org
-      - DOCKER_INFLUXDB_INIT_BUCKET=iot-data
+        - DOCKER_INFLUXDB_INIT_MODE=setup
+        - DOCKER_INFLUXDB_INIT_USERNAME=admin
+        - DOCKER_INFLUXDB_INIT_PASSWORD=cicciopasticcio2398!
+        - DOCKER_INFLUXDB_INIT_ORG=fablabmantova
+        - DOCKER_INFLUXDB_INIT_BUCKET=sentry_bucket
+        - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=4kUPVMsZenpwBOriUjClg3EdoAIoWsZRbN0gDhqO4AGKDkML
     networks:
       - iot-network
 
