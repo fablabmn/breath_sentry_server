@@ -185,8 +185,8 @@
         "once": true,
         "onceDelay": "0",
         "topic": "",
-        "x": 50,
-        "y": 120,
+        "x": 210,
+        "y": 140,
         "wires": [
             [
                 "a2af13606dc40fd7"
@@ -205,8 +205,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 230,
-        "y": 120,
+        "x": 390,
+        "y": 140,
         "wires": [
             []
         ]
@@ -237,14 +237,14 @@
         "type": "file in",
         "z": "b590023ad60e02f5",
         "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 600,
+        "x": 620,
         "y": 420,
         "wires": [
             [
@@ -284,7 +284,7 @@
         "y": 420,
         "wires": [
             [
-                "4ca49fd998c1c677"
+                "c7d66adf9765f04a"
             ]
         ]
     },
@@ -296,8 +296,8 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 530,
-        "y": 220,
+        "x": 510,
+        "y": 180,
         "wires": [
             [
                 "482dd3464db7c499"
@@ -316,8 +316,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 640,
-        "y": 320,
+        "x": 720,
+        "y": 260,
         "wires": [
             [
                 "d2073b7eef7cd685"
@@ -337,7 +337,46 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1220,
+        "x": 1380,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c7d66adf9765f04a",
+        "type": "function",
+        "z": "b590023ad60e02f5",
+        "name": "query",
+        "func": "msg.payload = [\n    {\n        pm1: msg.pm1,\n        pm2_5: msg.pm2_5,\n        pm4: msg.pm4,\n        pm10: msg.pm10,\n        humidity: msg.humidity,\n        temperature: msg.temperature,\n        voc_index: msg.voc_index,\n        nox_index: msg.nox_index\n    },\n    { board_id: msg.board_id }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1190,
+        "y": 420,
+        "wires": [
+            [
+                "4ca49fd998c1c677",
+                "62c7b479b5ea6037"
+            ]
+        ]
+    },
+    {
+        "id": "62c7b479b5ea6037",
+        "type": "influxdb out",
+        "z": "b590023ad60e02f5",
+        "influxdb": "e4494fe5fefcb554",
+        "name": "",
+        "measurement": "air_quality",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "fablabmantova",
+        "bucket": "sentry_bucket",
+        "x": 1420,
         "y": 420,
         "wires": []
     },
@@ -348,7 +387,7 @@
         "name": "risposta_test",
         "statusCode": "200",
         "headers": {},
-        "x": 710,
+        "x": 870,
         "y": 200,
         "wires": []
     },
@@ -357,12 +396,12 @@
         "type": "http in",
         "z": "a37c0a24890d4767",
         "name": "",
-        "url": "sentry_lists",
+        "url": "sentry/retrieve/board_lists",
         "method": "get",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 120,
+        "x": 230,
         "y": 200,
         "wires": [
             [
@@ -383,7 +422,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 710,
+        "x": 870,
         "y": 140,
         "wires": []
     },
@@ -392,14 +431,14 @@
         "type": "file in",
         "z": "a37c0a24890d4767",
         "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 320,
+        "x": 460,
         "y": 200,
         "wires": [
             [
@@ -415,7 +454,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 550,
+        "x": 710,
         "y": 200,
         "wires": [
             [
@@ -423,6 +462,131 @@
                 "8528c51b299d828e"
             ]
         ]
+    },
+    {
+        "id": "ba46990aaab64e94",
+        "type": "http in",
+        "z": "a37c0a24890d4767",
+        "name": "",
+        "url": "sentry/retrieve/environment_data",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 360,
+        "wires": [
+            [
+                "3ce2484a6ec88c23"
+            ]
+        ]
+    },
+    {
+        "id": "3ce2484a6ec88c23",
+        "type": "function",
+        "z": "a37c0a24890d4767",
+        "name": "query",
+        "func": "const board_id = msg.req.query.board_id;\n\nif (!board_id) {\n    msg.statusCode = 400;\n    msg.payload = { error: \"board_id is required\" };\n    return [null, msg];\n}\n\nnode.warn(\"Board ID \"+ board_id);\n\nmsg.query = `\nfrom(bucket: \"sentry_bucket\")\n  |> range(start: -7d)\n  |> filter(fn: (r) => r._measurement == \"air_quality\")\n  |> filter(fn: (r) => r.board_id == \"${board_id}\")\n`;\nnode.warn(msg);\nreturn [msg, null];",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 360,
+        "wires": [
+            [
+                "39aff07efeee2405"
+            ],
+            [
+                "917f152c526c752e"
+            ]
+        ]
+    },
+    {
+        "id": "39aff07efeee2405",
+        "type": "influxdb in",
+        "z": "a37c0a24890d4767",
+        "influxdb": "e4494fe5fefcb554",
+        "name": "",
+        "query": "{{{msg.query}}}",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "fablabmantova",
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "61c1737f429fd039",
+                "7e46ac3c44de7320"
+            ]
+        ]
+    },
+    {
+        "id": "61c1737f429fd039",
+        "type": "function",
+        "z": "a37c0a24890d4767",
+        "name": "json_reformatter",
+        "func": "const result = msg.payload;\n\nif (!result || result.length === 0) {\n    msg.statusCode = 404;\n    msg.payload = { error: \"No data found\" };\n    return msg;\n}\n\n// Raggruppa per timestamp\nconst grouped = {};\nresult.forEach(row => {\n    const ts = row._time;\n    if (!grouped[ts]) {\n        grouped[ts] = { timestamp: ts, board_id: row.board_id };\n    }\n    grouped[ts][row._field] = row._value;\n});\n\nmsg.statusCode = 200;\nmsg.headers = { \"Content-Type\": \"application/json\" };\nmsg.payload = Object.values(grouped);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 440,
+        "wires": [
+            [
+                "829f6c9090156be2",
+                "917f152c526c752e"
+            ]
+        ]
+    },
+    {
+        "id": "829f6c9090156be2",
+        "type": "debug",
+        "z": "a37c0a24890d4767",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "917f152c526c752e",
+        "type": "http response",
+        "z": "a37c0a24890d4767",
+        "name": "http_response",
+        "statusCode": "",
+        "headers": {},
+        "x": 980,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "7e46ac3c44de7320",
+        "type": "debug",
+        "z": "a37c0a24890d4767",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 500,
+        "wires": []
     },
     {
         "id": "971dd88254d9615f",
@@ -528,7 +692,7 @@
         "type": "function",
         "z": "f91ebe6f2c5a8c0c",
         "name": "check_if_empty",
-        "func": "const board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nif (!board_id) {\n    node.warn(\"board_id vuoto!\");\n    return null;\n}\nif (!board_name){\n    node.warn(\"board_name vuoto!\");\n    return null;\n}\nreturn msg;",
+        "func": "const board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nif (!board_id) {\n    node.warn(\"board_id vuoto!\");\n    return null;\n}\nif (!board_name){\n    node.warn(\"board_name vuoto!\");\n    return null;\n}\nmsg.filename = global.get(\"sentry_list_file\");\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -548,14 +712,14 @@
         "type": "file in",
         "z": "f91ebe6f2c5a8c0c",
         "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 640,
+        "x": 620,
         "y": 500,
         "wires": [
             [
@@ -598,31 +762,11 @@
         ]
     },
     {
-        "id": "ac12c4387e19e5b2",
-        "type": "file in",
-        "z": "f91ebe6f2c5a8c0c",
-        "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
-        "format": "utf8",
-        "chunk": false,
-        "sendError": false,
-        "encoding": "none",
-        "allProps": false,
-        "x": 440,
-        "y": 260,
-        "wires": [
-            [
-                "37461b81294ada75"
-            ]
-        ]
-    },
-    {
         "id": "e752f46055b5b98c",
         "type": "function",
         "z": "f91ebe6f2c5a8c0c",
         "name": "create_json_entry",
-        "func": "\nconst board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nmsg.payload.push({\n    board_id,\n    board_name: board_name,\n    authorized: true\n});\nreturn msg;",
+        "func": "\nconst board_id = flow.get('board_id') || '';\nconst board_name = flow.get('board_name') || '';\nmsg.payload.push({\n    board_id,\n    board_name: board_name,\n    authorized: true\n});\nmsg.filename = global.get(\"sentry_list_file\");\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -657,14 +801,14 @@
         "id": "d16468cb7da4c6e2",
         "type": "file",
         "z": "f91ebe6f2c5a8c0c",
-        "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
+        "name": "overwrite_file",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
         "appendNewline": true,
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 440,
+        "x": 430,
         "y": 340,
         "wires": [
             [
@@ -810,13 +954,13 @@
         "type": "file",
         "z": "f91ebe6f2c5a8c0c",
         "name": "",
-        "filename": "sentry_list_file",
-        "filenameType": "str",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
         "appendNewline": true,
         "createDir": true,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 580,
+        "x": 560,
         "y": 680,
         "wires": [
             [
@@ -889,6 +1033,26 @@
         "y": 120,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "ac12c4387e19e5b2",
+        "type": "file in",
+        "z": "f91ebe6f2c5a8c0c",
+        "name": "",
+        "filename": "$globalContext(\"sentry_list_file\")",
+        "filenameType": "jsonata",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 420,
+        "y": 260,
+        "wires": [
+            [
+                "37461b81294ada75"
+            ]
         ]
     }
 ]
