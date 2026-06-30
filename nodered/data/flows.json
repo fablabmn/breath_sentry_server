@@ -284,7 +284,8 @@
         "y": 420,
         "wires": [
             [
-                "c7d66adf9765f04a"
+                "c7d66adf9765f04a",
+                "24f42ac4368e1801"
             ]
         ]
     },
@@ -333,19 +334,19 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
+        "complete": "payload",
+        "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1380,
-        "y": 340,
+        "x": 1420,
+        "y": 360,
         "wires": []
     },
     {
         "id": "c7d66adf9765f04a",
         "type": "function",
         "z": "b590023ad60e02f5",
-        "name": "query",
+        "name": "query_for_air_quality",
         "func": "msg.payload = [\n    {\n        pm1: msg.pm1,\n        pm2_5: msg.pm2_5,\n        pm4: msg.pm4,\n        pm10: msg.pm10,\n        humidity: msg.humidity,\n        temperature: msg.temperature,\n        voc_index: msg.voc_index,\n        nox_index: msg.nox_index\n    },\n    { board_id: msg.board_id }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -353,7 +354,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
+        "x": 1240,
         "y": 420,
         "wires": [
             [
@@ -376,8 +377,64 @@
         "retentionPolicyV18Flux": "",
         "org": "fablabmantova",
         "bucket": "sentry_bucket",
-        "x": 1420,
+        "x": 1480,
         "y": 420,
+        "wires": []
+    },
+    {
+        "id": "24f42ac4368e1801",
+        "type": "function",
+        "z": "b590023ad60e02f5",
+        "name": "query_for_location",
+        "func": "msg.payload = [\n    {\n        latitude: 45.42,\n        longitude: 11.98\n    },\n    { board_id: msg.board_id }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1230,
+        "y": 520,
+        "wires": [
+            [
+                "1bde18a130c66629",
+                "f9ab3fa17f7caf6f"
+            ]
+        ]
+    },
+    {
+        "id": "1bde18a130c66629",
+        "type": "influxdb out",
+        "z": "b590023ad60e02f5",
+        "influxdb": "e4494fe5fefcb554",
+        "name": "",
+        "measurement": "location",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "fablabmantova",
+        "bucket": "sentry_bucket",
+        "x": 1470,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "f9ab3fa17f7caf6f",
+        "type": "debug",
+        "z": "b590023ad60e02f5",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1440,
+        "y": 580,
         "wires": []
     },
     {
