@@ -1,17 +1,15 @@
-https://localhost {
-    tls internal
+{
+        debug
+        email {$EMAIL}
+}
 
-    handle /sentry/* {
-        reverse_proxy nodered-app:1880
-    }
+{$SITE_ADDRESS} {
+        @sentry path /sentry/*
+        handle @sentry {
+                reverse_proxy nodered:1880
+        }
 
-    handle /grafana/* {
-        reverse_proxy grafana:3000
-    }
-
-    # Rigira TUTTO il traffico a Node-RED
-    #reverse_proxy nodered-app:1880
-    handle {
-        reverse_proxy nodered-app:1880
-    }
+        handle {
+                respond "Not found" 404
+        }
 }
